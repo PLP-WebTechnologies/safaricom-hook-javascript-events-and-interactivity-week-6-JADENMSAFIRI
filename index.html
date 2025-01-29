@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive Webpage</title>
+  <style>
+    body {
+      background-color: white;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    button {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      color: #333;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .slider {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .slider input[type=range] {
+      width: 100%;
+      height: 25px;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .slider output {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #eee;
+      color: #333;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      max-width: 90%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: white;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-error {
+      color: red;
+    }
+
+    .dropdown {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .dropdown select {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Interactive Webpage</h1>
+
+    <button id="toggle-background-color">Toggle Background Color</button>
+
+    <div class="slider">
+      <input type="range" min="16" max="32" value="16" step="1" oninput="updateFontSize(this.value)">
+      <output id="font-size">16px</output>
+    </div>
+
+    <button id="open-modal">Open Modal</button>
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h1>Modal Title</h1>
+        <p>This is a modal window. You can add any content here.</p>
+      </div>
+    </div>
+
+    <form id="form" onsubmit="return validateForm()">
+      <div class="form-group">
+        <label class="form-label" for="name">Name</label>
+        <input class="form-input" type="text" id="name" required>
+        <span class="form-error" id="name-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" type="email" id="email" required>
+        <span class="form-error" id="email-error"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" minlength="8" required>
+        <span class="form-error" id="password-error"></span>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div class="dropdown">
+      <label class="dropdown-label" for="dropdown">Dropdown</label>
+      <select id="dropdown" onchange="showDropdownMessage(this.value)">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+    </div>
+  </div>
+
+  <script>
+    // Toggle background color
+    const toggleBackgroundColorButton = document.getElementById('toggle-background-color');
+    toggleBackgroundColorButton.addEventListener('click', () => {
+      const body = document.body;
+      body.style.backgroundColor = body.style.backgroundColor === 'blue' ? 'white' : 'blue';
+    });
+
+    // Update font size
+    const fontSizeOutput = document.getElementById('font-size');
+    function updateFontSize(value) {
+      fontSizeOutput.textContent = `${value}px`;
+      document.body.style.fontSize = `${value}px`;
+    }
+
+    // Open modal
+    const openModalButton = document.getElementById('open-modal');
+    openModalButton.addEventListener('click', () => {
+      const modal = document.getElementById('modal');
+      modal.style.display = 'block';
+    });
+
+    // Close modal
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.style.display = 'none';
+    }
+
+    // Form validation
+    const form = document.getElementById('form');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const nameError = document.getElementById('name-error');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+    function validateForm() {
+      let valid = true;
+
+      // Validate name
+      if (nameInput.value.length < 3) {
+        nameError.textContent = 'Name must be at least 3 characters long.';
+        valid = false;
+      } else {
+        nameError.textContent = '';
+      }
+
+      // Validate email
+      if (!emailInput.value.match(/^[\w-\.]+@[\w-]+\.[a-z]{2,4}$/)) {
+        emailError.textContent = 'Invalid email address.';
+        valid = false;
+      } else {
+        emailError.textContent = '';
+      }
+
+      // Validate password
+      if (passwordInput.value.length < 8 || !passwordInput.value.match(/[A-Z]/) || !passwordInput.value.match(/[0-9]/)) {
+        passwordError.textContent = 'Password must be at least 8 characters long and contain at least one uppercase letter and one number.';
+        valid = false;
+      } else {
+        passwordError.textContent = '';
+      }
+
+      return valid;
+    }
+
+    // Dropdown message
+    function showDropdownMessage(value) {
+      alert(`You selected ${value}.`);
+    }
+  </script>
+</body>
+</html>
